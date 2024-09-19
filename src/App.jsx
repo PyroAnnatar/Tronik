@@ -204,9 +204,43 @@ export default function App() {
 
 */
 
+  function handleKey(e) {
+    const { dataset } = e.target;
+    setSynthKeys((prev) =>
+      prev.map((key) =>
+        key.keyName === dataset.note ? { ...key, active: true } : key
+      )
+    );
+  }
+
+  function handleKeyDown(e) {
+    setSynthKeys((prev) =>
+      prev.map((synth) =>
+        synth.computerKey === e.key
+          ? { ...synth, keyPressed: true, active: true }
+          : synth
+      )
+    );
+  }
+
+  function handleKeyUp(e) {
+    setSynthKeys((prev) =>
+      prev.map((synth) =>
+        synth.computerKey === e.key
+          ? { ...synth, keyPressed: false, active: false }
+          : synth
+      )
+    );
+  }
+
   return (
     <div className="wrapper">
-      <div className="main-container">
+      <div
+        className="main-container"
+        onMouseDown={handleKey}
+        onKeyDown={handleKeyDown}
+        onKeyUp={handleKeyUp}
+      >
         <Settings {...propsBundle} />
 
         <Keys showKeys={showKeys} synthKeys={synthKeys} />
